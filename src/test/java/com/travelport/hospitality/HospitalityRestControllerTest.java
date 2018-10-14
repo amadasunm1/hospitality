@@ -1,6 +1,6 @@
 package com.travelport.hospitality;
 
-import static org.hamcrest.Matchers.*;
+import static io.restassured.RestAssured.get;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,7 +13,6 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import io.restassured.RestAssured;
-import static io.restassured.RestAssured.get;
 
 
 @RunWith(SpringJUnit4ClassRunner.class)  
@@ -28,20 +27,20 @@ public class HospitalityRestControllerTest {
 	@Test
 	public void getAllStates() {
 		get("/travelport/state").then().assertThat()
-			.body("messages", containsString("Retrieved all states!"));
+			.statusCode(200);
 	}
 
 	@Test
 	public void getState() {
-		get("/travelport/state/Alabama").then().assertThat().body("messages",
-				containsString("Found State Alabama"));
+		get("/travelport/state/Alabama").then().assertThat().statusCode(200);
 	}
 
 	@Test
 	public void getNStates() {
 		get("/travelport/state?name=Alabama&name=Georgia").then().assertThat()
-				.body("messages", containsString("Found State Alabama")).and()
-				.body("messages", containsString("Found State Georgia"));
+				.statusCode(200);
+		get("/travelport/state?name=Alabama&name=Georgika").then().assertThat()
+		.statusCode(404);
 	}
 	
     @Before
